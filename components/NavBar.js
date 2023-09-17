@@ -16,8 +16,8 @@ const NavBar = () => {
             </Link>
             {/* Navigation Links */}
             <nav className="space-x-4 flex items-center"> {/* Use flex to align items horizontally */}
-              <Link href="/browse">
-                <div className="text-gray-600 hover:text-gray-800 transition duration-300">Browse Legal Services</div>
+              <Link href="/users">
+                <div className="text-gray-600 hover:text-gray-800 transition duration-300">Find Advocate</div>
               </Link>
               {/* Manage Link */}
               <Link href="/manage">
@@ -42,7 +42,7 @@ const NavBar = () => {
             </Link>
             
             {/* Post a Legal Project Button */}
-            <Link href="/post-legal-project">
+            <Link href="/post">
               <div className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition duration-300">
                 Post a Legal Project
               </div>
