@@ -1,7 +1,8 @@
 // components/NavBar.js
 
 import Link from "next/link";
-import { FiBell, FiMessageCircle, FiUser } from "react-icons/fi"; // Import notification, message, and profile icons
+import { FiBell, FiMessageCircle, FiUser } from "react-icons/fi"; 
+import Image from "next/image";
 
 const NavBar = ({ user }) => {
   const isAdvocate = user && user.type === "Advocate";
@@ -15,7 +16,12 @@ const NavBar = ({ user }) => {
             {/* Logo */}
             <Link href="/">
               <div className="text-xl font-semibold text-gray-800 mr-4">
-                Your Logo
+              <Image
+      src="/nyay-sathi.svg" 
+      alt="Your Logo" 
+      width={60} 
+      height={12} 
+    />
               </div>
             </Link>
             {/* Navigation Links */}

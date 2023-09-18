@@ -13,6 +13,7 @@ const SearchProfile = ({ user }) => {
   };
 
   return (
+    <Link href={user.link}>
     <div className="bg-white rounded-lg shadow-md p-4 mb-4 flex flex-row items-center">
       {/* Left side (Profile Image) */}
       <div className="w-1/5 p-2">
@@ -54,16 +55,9 @@ const SearchProfile = ({ user }) => {
           </p>
         </div>
         <p className="mt-4">{user.bio}</p>
-        <Link
-          href={user.portfolioLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded mt-4 ml-0 md:ml-4 inline-block hover:bg-blue-600 hover:text-white hover:underline"
-        >
-          Portfolio
-        </Link>
       </div>
     </div>
+    </Link>
   );
 };
 
