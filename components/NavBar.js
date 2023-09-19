@@ -1,7 +1,7 @@
 // components/NavBar.js
 
 import Link from "next/link";
-import { FiBell, FiMessageCircle, FiUser } from "react-icons/fi"; 
+import { FiBell, FiMessageCircle, FiUser } from "react-icons/fi";
 import Image from "next/image";
 
 const NavBar = ({ user }) => {
@@ -16,12 +16,12 @@ const NavBar = ({ user }) => {
             {/* Logo */}
             <Link href="/">
               <div className="text-xl font-semibold text-gray-800 mr-4">
-              <Image
-      src="/nyay-sathi.svg" 
-      alt="Your Logo" 
-      width={60} 
-      height={12} 
-    />
+                <Image
+                  src="/nyay-sathi.svg"
+                  alt="Your Logo"
+                  width={60}
+                  height={12}
+                />
               </div>
             </Link>
             {/* Navigation Links */}
@@ -59,11 +59,16 @@ const NavBar = ({ user }) => {
             </Link>
 
             {/* Post a Legal Project Button */}
-            <Link href="/post">
-              <div className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition duration-300">
-                Post a Legal Project
-              </div>
-            </Link>
+
+            {isAdvocate ? (
+              <div></div>
+            ) : (
+              <Link href="/post">
+                <div className="bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition duration-300">
+                  Post a Legal Project
+                </div>
+              </Link>
+            )}
 
             {/* Profile Icon */}
             <Link href="/profile">
