@@ -1,14 +1,19 @@
-import Link from 'next/link';
-import React, { useState } from 'react';
+import Link from "next/link";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    userType: '', // Added userType field
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    type: "",
+    otp: "",
+    username: '',
   });
+
+  const [isVerified, setIsVerified] = useState(false); // To track verification status
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,9 +23,72 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleVerifyClick = async () => {
+    try {
+      // Send a request to fetch OTP
+      const response = await fetch("http://localhost:8081/otp/send-otp/", {
+        method: "POST",
+        body: JSON.stringify({ email: formData.email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setIsVerified(true); // OTP sent successfully, update verification status
+      } else {
+        setIsVerified(false);
+        alert("Failed to send OTP. Please check your email.");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+  };
+
+  const router = useRouter(); // Initialize the router
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add code to handle form submission (e.g., send data to server)
+
+    //random four digit generator
+    const randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
+
+    try {
+      const username = `${formData.firstName}${randomFourDigitNumber}`;
+
+      // Add the generated username to the formData
+      const updatedFormData = {
+        ...formData,
+        username: username,
+      };
+
+      console.log(updatedFormData)
+
+      // to handle form submission
+      const response = await fetch("http://localhost:8081/auth/register", {
+        method: "POST",
+        body: JSON.stringify(updatedFormData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        // Registration successful
+        alert("Registration successful!");
+
+        // Redirect to the login page
+        router.push({
+          pathname: "/login",
+          query: { registrationSuccess: true },
+        });
+      } else {
+        // Registration failed
+        alert("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error registering:", error);
+    }
   };
 
   return (
@@ -51,7 +119,7 @@ const Register = () => {
             required
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <input
             type="email"
             id="email"
@@ -62,7 +130,30 @@ const Register = () => {
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
             required
           />
+          {!isVerified && (
+            <button
+              type="button"
+              className="absolute right-4 top-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+              onClick={handleVerifyClick}
+            >
+              Verify
+            </button>
+          )}
         </div>
+        {isVerified && (
+          <div className="mb-4">
+            <input
+              type="text"
+              id="otp"
+              name="otp"
+              value={formData.otp}
+              onChange={handleChange}
+              placeholder="OTP"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+              required
+            />
+          </div>
+        )}
         <div className="mb-6">
           <input
             type="password"
@@ -81,9 +172,9 @@ const Register = () => {
             <label className="inline-flex items-center">
               <input
                 type="radio"
-                name="userType"
+                name="type"
                 value="Advocate"
-                checked={formData.userType === 'Advocate'}
+                checked={formData.type === "Advocate"}
                 onChange={handleChange}
                 className="form-radio h-4 w-4 text-blue-500"
               />
@@ -92,9 +183,9 @@ const Register = () => {
             <label className="inline-flex items-center ml-6">
               <input
                 type="radio"
-                name="userType"
+                name="type"
                 value="Client"
-                checked={formData.userType === 'Client'}
+                checked={formData.type === "Client"}
                 onChange={handleChange}
                 className="form-radio h-4 w-4 text-blue-500"
               />
@@ -112,7 +203,7 @@ const Register = () => {
         </div>
       </form>
       <p className="mt-4 text-gray-600 text-center">
-        Already have an account?{' '}
+        Already have an account?{" "}
         <Link href="/login">
           <span className="text-blue-500">Log in</span>
         </Link>

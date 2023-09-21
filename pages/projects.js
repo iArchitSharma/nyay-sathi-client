@@ -1,5 +1,6 @@
 import React from "react";
 import Projects from "@/components/SearchProjects";
+import { useAuth } from '../contexts/AuthContext';
 
 const proj = {
   title: "Hello World",
@@ -7,11 +8,20 @@ const proj = {
     "To create a new component using Next.js and Tailwind CSS that goes inside the Top Results section and includes a heading, description (not more than 50 words), a tag for legal service, and a tag for sub-service, you can follow these steps: To create a new component using Next.js and Tailwind CSS that goes inside the Top Results section and includes a heading, description (not more than 50 words), a tag for legal service, and a tag for sub-service, you can fol",
   legalService: "Civil Law Services",
   subService: "Contract Disputes",
-  link: "/work/asdfsd",
+  link: "/postView",
   time: "5 hours ago"
 };
 
+
 export default function projects() {
+
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
+
+  if(!(isLoggedIn)){
+    return <p>Error</p>
+  }
+
+
   return (
     <div className="flex flex-col items-center">
       <div className="bg-gray-800 w-full p-4 mb-4 mt-4">

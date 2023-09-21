@@ -1,5 +1,6 @@
 import React from "react";
 import SearchProfile from "@/components/SearchProfile";
+import { useAuth } from '../contexts/AuthContext';
 
 const user = {
   profileImage: "/test/profile.jpg",
@@ -17,6 +18,14 @@ const user = {
 };
 
 export default function Users() {
+
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
+
+  if(!(isLoggedIn)){
+    return <p>Error</p>
+  }
+
+
   return (
     <div className="flex flex-col items-center">
       <div className="bg-gray-800 w-full p-4 mb-4 mt-4">

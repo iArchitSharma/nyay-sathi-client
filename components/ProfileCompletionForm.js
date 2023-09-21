@@ -1,0 +1,203 @@
+import React, { useState } from "react";
+
+const ProfileCompletionForm = ({ userType }) => {
+  const [formData, setFormData] = useState({
+    picture: "",
+    gender: "",
+    age: "",
+    location: "",
+    enrollmentNumber: "",
+    description: "",
+    experience: "",
+    portfolio: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Assuming you have the username stored in a variable, replace 'username' with the actual username.
+     
+    const storedUsername = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+    console.log(token)
+    const username = storedUsername;
+
+    // Create an object with the form data to be sent to the server
+    const postData = {
+      ...formData,
+      // Add other fields as needed
+    };
+
+    // Define the endpoint based on userType
+    const endpoint =
+      userType === "Advocate"
+        ? `http://localhost:8081/advocate/${username}`
+        : `http://localhost:8081/client/${username}`;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization : `Bearer ${token}`
+        },
+        body: JSON.stringify(postData),
+        
+      });
+
+      if (response.ok) {
+        // Handle successful submission, e.g., show a success message or redirect
+        console.log("Data successfully submitted");
+      } else {
+        // Handle errors or validation failures
+        console.error("Submission failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
+  };
+
+  return (
+    <div>
+      <h2 className="text-3xl font-semibold mb-4">Complete Your Profile</h2>
+      <form onSubmit={handleSubmit}>
+        {/* Form Fields */}
+        <div className="mb-4">
+          <label htmlFor="picture" className="block text-sm font-medium text-gray-700">
+            Upload Picture
+          </label>
+          <input
+            type="file"
+            id="picture"
+            name="picture"
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+            Gender
+          </label>
+          <input
+            type="text"
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="age" className="block text-sm font-medium text-gray-700">
+            Age
+          </label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+            Location
+          </label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+            required
+          />
+        </div>
+
+        {/* Advocate-Only Fields */}
+        {userType === 'Advocate' && (
+          <>
+            <div className="mb-4">
+              <label htmlFor="enrollmentNumber" className="block text-sm font-medium text-gray-700">
+                Enrollment Number
+              </label>
+              <input
+                type="text"
+                id="enrollmentNumber"
+                name="enrollmentNumber"
+                value={formData.enrollmentNumber}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows="4"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+                required
+              ></textarea>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
+                Experience
+              </label>
+              <input
+                type="text"
+                id="experience"
+                name="experience"
+                value={formData.experience}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="portfolio" className="block text-sm font-medium text-gray-700">
+                Portfolio
+              </label>
+              <input
+                type="url"
+                id="portfolio"
+                name="portfolio"
+                value={formData.portfolio}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+                required
+              />
+            </div>
+          </>
+        )}
+
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default ProfileCompletionForm;

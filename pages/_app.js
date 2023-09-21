@@ -1,5 +1,7 @@
 import '@/styles/globals.css'
 import NavBar from '@/components/NavBar';
+import { AuthProvider } from '../contexts/AuthContext';
+import Footer from '@/components/Footer';
 
 const user = {
   profileImage: "/test/profile.jpg",
@@ -17,9 +19,10 @@ const user = {
 
 export default function App({ Component, pageProps }) {
   return (
-    <div>
+    <AuthProvider>
       <NavBar user={user}/>
       <Component {...pageProps} />
-    </div>
+      <Footer/>
+      </AuthProvider>
   );
 }

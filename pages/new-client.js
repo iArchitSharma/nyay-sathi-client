@@ -1,8 +1,28 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
 
 const Home = () => {
+
+  const router = useRouter();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Validate the token on the server-side if needed
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+
+
+  if(!(isLoggedIn)){
+    return <p>Error</p>
+  }
+
   return (
     <div className="flex h-screen">
       {/* Left Side (Image) */}
